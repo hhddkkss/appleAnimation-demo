@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>apple官網特效練習</title>
+        <style>
+            html {
+                scroll-behavior: smooth;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                overflow: hidden;
+            }
+            #app {
+                width: 100vw;
+                height: 100vh;
+                overflow: auto;
+            }
+            section {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+            .text {
+                font-size: 75px;
+                color: burlywood;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .phone {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                transform: scale(var(--scale));
+            }
+            .phone > * {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .phone > img {
+                width: 60%;
+                height: auto;
+                clip-path: inset(15% 7.25% round 4.75%);
+            }
+            .phone > .rect {
+                width: 50%;
+                height: 0;
+                padding-top: 25%;
+                /* padding-top會拿外層的寬度去做比例 */
+                border: 10px solid #000;
+                border-radius: 10px;
+            }
+            #section2 {
+                background-color: red;
+            }
+            #section3 {
+                background-color: navy;
+            }
+
+            .sticky {
+                position: sticky;
+                top: 0;
+                left: 0;
+            }
+            .static {
+                position: static;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <section class="text">指南進了突然多少空。</section>
+            <section id="section2" class="sticky">
+                <div class="phone">
+                    <img src="https://picsum.photos/1920/1200/?random=237" />
+                    <div class="rect"></div>
+                </div>
+            </section>
+            <section id="section3">
+                <div class="phone">
+                    <img src="https://picsum.photos/1920/1200/?random=237" />
+                    <div class="rect"></div>
+                </div>
+                <h2>歡迎來到</h2>
+            </section>
+            <section class="text" style="background-color: red">
+                大量大陸，跟我演唱。
+            </section>
+        </div>
+        <script>
+            const app = document.querySelector('#app')
+            const section2 = document.querySelector('#section2')
+            const section3 = document.querySelector('#section3')
+            const adText = section3.querySelector('h2')
+
+            app.addEventListener('scroll', (e) => {
+                console.log(app.scrollTop)
+                const windowTop = app.scrollTop
+                const windowHeight = window.innerHeight
+                if (windowTop < windowHeight) {
+                    //用來設定css variable的變數值
+                    section2.style.setProperty('--scale', 3)
+                } else if (windowTop > 2 * windowHeight) {
+                    section2.style.setProperty('--scale', 1)
+                    section2.classList.remove('sticky')
+                    section3.classList.remove('static')
+                } else {
+                    const progress = (windowTop - windowHeight) / windowHeight
+                    section2.classList.add('sticky')
+                    section3.classList.add('static')
+                    section2.style.setProperty('--scale', 3 - 2 * progress)
+                }
+            })
+        </script>
+    </body>
+</html>
